@@ -83,10 +83,10 @@ public class MySketch extends PApplet {
     	ellipse(100, 100, (int)(total * frameI / 60), (int)(total * frameI / 60));
     	stroke(60 * frameI / 60, 64 * frameI / 60, 0);
     	fill(120 * frameI / 60, 127 * frameI / 60, 0);
-    	ellipse(100, 100, (int)(1000 * frameI / 60 * ratio), (int)(1000 * frameI / 60 * ratio));
+    	ellipse(100, 100, (int)(total / 2 * frameI / 60), (int)(total / 2 * frameI / 60));
     	stroke(240, 255, 0);
     	fill(240 * frameI / 60, 255 * frameI / 60, 0);
-    	ellipse(100, 100, (int)(300 * frameI / 60 * ratio), (int)(300 * frameI / 60 * ratio));
+    	ellipse(100, 100, (int)(current * frameI / 60), (int)(current * frameI / 60));
     	
     	if (!modifying) {
 	    	stroke(240, 255, 0);
