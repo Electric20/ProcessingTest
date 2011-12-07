@@ -10,12 +10,23 @@ import processing.core.*;
 public class MySketch extends PApplet {
 
 	PFont font;
-	int hubId = 22;
+	int hubId = 72;
 	int total, current;
 	double ratio = 0;
 	ArrayList history = new ArrayList();
 	boolean modifying = false;
 	int frameI = 0;
+	
+	/*public void mousePressed()
+	  {
+	    if ((mouseX > x) && (mouseX < x+w) &&
+	      (mouseY > y) && (mouseY < y+w) {
+	      over = true;
+	    } else {
+	      over = false;
+	    }
+	  }
+*/
 	
     public void setup() {
           size(800, 800);
@@ -33,24 +44,23 @@ public class MySketch extends PApplet {
 					JSONObject json = pullJSON("http://www.electric20.com/dataStore/request.php?u=toadhall&p=energy21&action=currentNetLoad");
 					try {
 						total = json.getInt("data");
+						json = pullJSON("http://www.electric20.com/dataStore/request.php?u=toadhall&p=energy21&action=currentHubLoad&hubId=" + hubId);
+						try {
+							current = json.getInt("data");
+							ratio = (double)current / (double)total;
+							modifying = true;
+							history.add((int)((double)current / 9000 * 600));
+							while (history.size() > 140) {
+								history.remove(0);
+							}
+							modifying = false;
+						} catch (JSONException e) {
+							System.out.println("No data");
+						}
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println("No data");
 					}
-			    	json = pullJSON("http://www.electric20.com/dataStore/request.php?u=toadhall&p=energy21&action=currentHubLoad&hubId=" + hubId);
-					try {
-						current = json.getInt("data");
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					ratio = (double)current / (double)total;
-					modifying = true;
-					history.add((int)((double)current / 9000 * 600));
-					while (history.size() > 140) {
-						history.remove(0);
-					}
-					modifying = false;
+			    	
 					delay(2000);
 				}
 			}
@@ -70,7 +80,7 @@ public class MySketch extends PApplet {
     	
     	stroke(30 * frameI / 60, 32 * frameI / 60, 0);
     	fill(60 * frameI / 60, 64 * frameI / 60, 0);
-    	ellipse(100, 100, (int)(5000 * frameI / 60 * ratio), (int)(5000 * frameI / 60 * ratio));
+    	ellipse(100, 100, (int)(total * frameI / 60), (int)(total * frameI / 60));
     	stroke(60 * frameI / 60, 64 * frameI / 60, 0);
     	fill(120 * frameI / 60, 127 * frameI / 60, 0);
     	ellipse(100, 100, (int)(1000 * frameI / 60 * ratio), (int)(1000 * frameI / 60 * ratio));
